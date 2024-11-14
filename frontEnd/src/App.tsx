@@ -1,8 +1,10 @@
+import Header from "./components/headerHome"
+
 function App() {
   return (
     <>
       <div>
-        <h1 className='text-sky-400'> Olá mundo!</h1>
+        <Header/>
       </div>
     </>
   )
