@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  role      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  AuditLog  AuditLog[]
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  cnpj      Int      @unique
+  phone     Int      @unique
+  email     String   @unique
+  address   String
+  Order     Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Supplier {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  OrderBuy  OrderBuy[]
+}
+
+model Product {
+  id            Int             @id @default(autoincrement())
+  sku           Int
+  name          String
+  description   String
+  price         Decimal
+  cost          Decimal
+  measure       String
+  active        Boolean
+  Category      Category?       @relation(fields: [categoryId], references: [id])
+  categoryId    Int?
+  Stock         Stock[]
+  ItensOrder    ItensOrder[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  ItensOrderBuy ItensOrderBuy[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Stock {
+  id        Int      @id @default(autoincrement())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+  position  String
+  batch     String
+  pallet    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id           Int        @id @default(autoincrement())
+  client       Client     @relation(fields: [clientId], references: [id])
+  clientId     Int
+  itensOrder   ItensOrder @relation(fields: [itensOrderId], references: [id])
+  itensOrderId Int
+  status       String
+  total        Decimal
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model ItensOrder {
+  id        Int      @id @default(autoincrement())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+  subTotal  Decimal
+  Order     Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderBuy {
+  id              Int           @id @default(autoincrement())
+  supplier        Supplier      @relation(fields: [supplierId], references: [id])
+  supplierId      Int
+  itensOrderBuy   ItensOrderBuy @relation(fields: [itensOrderBuyId], references: [id])
+  itensOrderBuyId Int
+  status          String
+  total           Decimal
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model ItensOrderBuy {
+  id        Int        @id @default(autoincrement())
+  product   Product    @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+  subTotal  Decimal
+  OrderBuy  OrderBuy[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  action      String
+  tableName   String
+  recordId    Int
+  oldValues   Json?
+  newValues   Json?
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+  ipAddress   String?
+  userAgent   String?
+  endpoint    String?
+  description String?
+  severity    String   @default("INFO")
+  createdAt   DateTime @default(now())
+
+  @@index([tableName])
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@index([recordId])
+}
