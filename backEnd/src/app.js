@@ -4,6 +4,9 @@ import router from "./Routes/index.js";
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 router(app);
 
 const PORT = process.env.PORT;
