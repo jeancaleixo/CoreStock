@@ -1,4 +1,5 @@
 import CreateUserService from "../Services/User/create-user.js";
+import DeletUserService from "../Services/User/delet-user.js";
 import EditUserService from "../Services/User/edit-user.js";
 import GetAllUsersService from "../Services/User/get-all-users.js";
 import GetUserByIdService from "../Services/User/get-user-id.js";
@@ -8,6 +9,7 @@ const createUserService = new CreateUserService();
 const editUserService = new EditUserService();
 const getAllUsersService = new GetAllUsersService();
 const getUserByIdService = new GetUserByIdService();
+const deletUserService = new DeletUserService()
 
 export const createUser = async (req, res) => {
   try {
@@ -124,3 +126,25 @@ export const getUserById = async (req, res) => {
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
+
+export const deletUser = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const result = await deletUserService.execute({ id })
+
+    res.status(200).json(result)
+  } catch (error) {
+    console.log("Erro ao deletar usuário:", error);
+
+    if (error.message === "ID do usuário deve ser um número válido") {
+      return res.status(400).json({ error: "ID do usuário deve ser um número válido" });
+    }
+
+    if (error.message === "Usuário não encontrado") {
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+}
