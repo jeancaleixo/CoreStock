@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "../../generated/prisma/index.js";
 
 const prisma = new PrismaClient()
 
@@ -19,7 +19,7 @@ export default class DeletProductService {
         }
 
         await prisma.product.delete({
-            where: { id: idProduct}
+            where: { id: productId}
         })
 
         return { message: "Produto deletado com sucesso"}

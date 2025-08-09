@@ -1,4 +1,4 @@
-import { requiredFildsProduct } from "../Utils/requireds/requiredsFildsProduct.js";
+import { requiredFildsProduct } from "../Utils/requireds/requiredsFilds.js";
 import { randomUUID } from "crypto";
 
 export class Product {

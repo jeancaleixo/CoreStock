@@ -30,7 +30,7 @@ export default class EditUserService {
     if (email) updateData.email = email;
     if (name) updateData.name = name;
 
-    if ((Object.keys(updateData).length = 0)) {
+    if ((Object.keys(updateData).length === 0)) {
       throw new Error("Nenhum dado necessita de atualização");
     }
 

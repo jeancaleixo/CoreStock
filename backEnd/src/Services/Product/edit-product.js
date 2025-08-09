@@ -21,7 +21,7 @@ export default class EditProductService {
         }
 
         if (sku && sku !== existingProduct.sku) {
-            const skuInUse = await prisma.user.findUnique({
+            const skuInUse = await prisma.product.findUnique({
                 where: { sku },
             });
             if (skuInUse) {
@@ -32,7 +32,7 @@ export default class EditProductService {
         const updateData = {};
         if (sku) updateData.sku = sku;
 
-        if ((Object.keys(updateData).length = 0)) {
+        if ((Object.keys(updateData).length === 0)) {
             throw new Error("Nenhum dado necessita de atualização");
         }
 

@@ -8,3 +8,8 @@ export const requiredFildsProduct = [
   "category",
   "stock",
 ];
+
+  export const requiredFildsCategory = [
+    "name",
+    "products",
+  ]

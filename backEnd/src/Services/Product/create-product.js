@@ -10,21 +10,18 @@ export default class CreateProductService {
     });
 
     if (existingProduct) {
-      throw new Error("Email já está em uso");
+      throw new Error("Produto já está em uso");
     }
 
     const createdProduct = await prisma.product.create({
       data: {
         ...productData,
-        itensOrder: 0,
-        itensOrderBuy: 0,
       },
     });
 
     const product = new Product(
       {
         ...createdProduct,
-        updateAt: createdProduct.updatedAt,
       },
       createdProduct.id
     );
