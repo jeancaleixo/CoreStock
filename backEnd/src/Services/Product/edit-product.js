@@ -4,7 +4,8 @@ import { PrismaClient } from "../../generated/prisma/index.js";
 const prisma = new PrismaClient()
 
 export default class EditProductService {
-    async execute({ id, sku }) {
+    async execute(data) {
+        const { id, ...fieldsToUpdate } = data;
         const productId = parseInt(id, 10);
 
         if (isNaN(productId)) {
@@ -12,34 +13,33 @@ export default class EditProductService {
         }
 
         const existingProduct = await prisma.product.findUnique({
-            where: {
-                id: productId,
-            }
-        })
+            where: { id: productId }
+        });
         if (!existingProduct) {
             throw new Error("Produto não encontrado");
         }
 
-        if (sku && sku !== existingProduct.sku) {
+        if (fieldsToUpdate.sku && fieldsToUpdate.sku !== existingProduct.sku) {
             const skuInUse = await prisma.product.findUnique({
-                where: { sku },
+                where: { sku: fieldsToUpdate.sku },
             });
             if (skuInUse) {
                 throw new Error("Este sku já está em uso");
             }
         }
 
-        const updateData = {};
-        if (sku) updateData.sku = sku;
+        delete fieldsToUpdate.id;
+        delete fieldsToUpdate.createdAt;
+        delete fieldsToUpdate.updatedAt;
 
-        if ((Object.keys(updateData).length === 0)) {
+        if (Object.keys(fieldsToUpdate).length === 0) {
             throw new Error("Nenhum dado necessita de atualização");
         }
 
         const updatedProduct = await prisma.product.update({
-            where: { id: productId},
-            data: updateData
-        })
+            where: { id: productId },
+            data: fieldsToUpdate
+        });
 
         const product = new Product(
             {

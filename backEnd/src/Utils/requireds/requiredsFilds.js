@@ -5,11 +5,9 @@ export const requiredFildsProduct = [
   "price",
   "cost",
   "measure",
-  "category",
-  "stock",
+  "categoryId",
 ];
 
   export const requiredFildsCategory = [
     "name",
-    "products",
   ]

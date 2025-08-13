@@ -13,7 +13,7 @@ export class Category {
 
         this.props = {
             name: props.name,
-            products: props.products,
+            products: props.products || [],
             createdAt: props.createdAt,
             updateAt: props.updateAt,
         }

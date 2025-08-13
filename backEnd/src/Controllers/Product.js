@@ -31,20 +31,19 @@ export const createProduct = async (req, res) => {
 
 export const editProduct = async (req, res) => {
   try {
-    const { id } = req.params
-    const { sku } = req.body
+    const { id } = req.params;
+    const updateFields = req.body;
 
-    if (!sku) {
+    if (!updateFields || Object.keys(updateFields).length === 0) {
       return res.status(400).json({
-        error: "SKU deve ser fornecido para atualização",
+        error: "Nenhum campo enviado para atualização",
       });
     }
 
-    const product = await editProductService.execute({ id, sku })
-    const productResponse = ProductViewModel.toHttp(product)
+    const product = await editProductService.execute({ id, ...updateFields });
+    const productResponse = ProductViewModel.toHttp(product);
 
     res.status(200).json(productResponse);
-
   } catch (error) {
     console.log("Erro ao atualizar produto:", error);
 

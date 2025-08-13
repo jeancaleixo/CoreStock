@@ -20,7 +20,7 @@ export class Product {
       measure: props.measure,
       active: props.active,
       category: props.category,
-      stock: props.stock,
+  stock: props.stock || null,
       itensOrder: props.itensOrder,
       itensOrderBuy: props.itensOrderBuy,
       createdAt: props.createdAt,

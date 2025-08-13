@@ -13,9 +13,13 @@ export default class CreateProductService {
       throw new Error("Produto já está em uso");
     }
 
+
+    const { categoryId, Stock, stock, ...rest } = productData;
+
     const createdProduct = await prisma.product.create({
       data: {
-        ...productData,
+        ...rest,
+        Category: categoryId ? { connect: { id: categoryId } } : undefined,
       },
     });
 

@@ -4,9 +4,9 @@ import { PrismaClient } from "../../generated/prisma/index.js";
 const prisma = new PrismaClient()
 
 export default class CreateCategoryService{
-    async execute(name, products = []) {
+    async execute({ name }) {
         const existingCategory = await prisma.category.findFirst({
-            where: { name: name}
+            where: { name }
         })
 
         if (existingCategory){
@@ -15,17 +15,14 @@ export default class CreateCategoryService{
 
         const createdCategory = await prisma.category.create({
             data: {
-                name,
-                products: {
-                    connect: []
-                }
+                name
             }
         })
 
         const category = new Category(
             {
                 name,
-                products
+                products: []
             },
             createdCategory.id
         )

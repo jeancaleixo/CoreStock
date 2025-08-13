@@ -42,7 +42,7 @@ model Supplier {
 
 model Product {
   id            Int             @id @default(autoincrement())
-  sku           String
+  sku           String  @unique
   name          String
   description   String
   price         Decimal
