@@ -8,6 +8,14 @@ export const requiredFildsProduct = [
   "categoryId",
 ];
 
-  export const requiredFildsCategory = [
-    "name",
-  ]
+export const requiredFildsCategory = [
+  "name",
+]
+
+export const requiredFildsClient = [
+  "cnpj",
+  "fantasy",
+  "phone",
+  "email",
+  "address"
+]
